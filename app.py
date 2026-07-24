@@ -110,9 +110,15 @@ if selected_label:
     selected_gene = filtered_lookup_df[filtered_lookup_df["Lookup_Label"] == selected_label]["Gene_Unique"].values[0]
 
     # Filter Datasets
-    filtered_normal = normal_df[(normal_df["Gene_Unique"] == selected_gene) & (normal_df["nTPM"] >= expression_cutoff)]
-    filtered_cell = cell_df[(cell_df["Gene_Unique"] == selected_gene) & (cell_df["nTPM"] >= expression_cutoff)]
+    filtered_normal = normal_df[(normal_df["Gene_Unique"] == selected_gene) & (normal_df["nTPM"] >= expression_cutoff)].copy()
+    filtered_cell = cell_df[(cell_df["Gene_Unique"] == selected_gene) & (cell_df["nTPM"] >= expression_cutoff)].copy()
 
+    # Dynamic log calculation safety check
+    if use_log:
+        if "log2_nTPM" not in filtered_normal.columns and "nTPM" in filtered_normal.columns:
+            filtered_normal["log2_nTPM"] = np.log2(filtered_normal["nTPM"] + 1)
+        if "log2_nTPM" not in filtered_cell.columns and "nTPM" in filtered_cell.columns:
+            filtered_cell["log2_nTPM"] = np.log2(filtered_cell["nTPM"] + 1)
     gene_info = cell_df[cell_df["Gene_Unique"] == selected_gene].iloc[0]
 
     # Clean display values
@@ -185,12 +191,13 @@ if selected_label:
                 st.write(f"• **Chromosomal Locus:** Chr {gene_info.get('Chromosome', 'N/A')}")
             with col_b:
                 st.write(f"• **Protein Name:** {gene_info.get('Gene description', 'N/A')}")
-                st.write(f"• **Subcellular Location:** Cytoplasm / Plasma Membrane")
+                st.write(f"• **Subcellular Location:** {gene_info.get('Subcellular main location', 'N/A')}")
                 st.write(f"• **HPA Specificity Class:** {gene_info.get('RNA tissue specificity', 'N/A')}")
             with col_c:
                 st.write(f"• **Dysregulation Status:** {gene_info.get('Dysregulation_Status', 'N/A')}")
                 st.write(f"• **Normal Breast Level:** {normal_breast_val:.2f} nTPM")
                 st.write(f"• **Cancer Max Level:** {max_cell_val:.2f} nTPM ({top_cell_line})")
+                st.write(f"• **Disease Involvement:** {{gene_info.get('Disease involvement', 'N/A')}") 
 
             
             st.write(f"• **Protein Class:** {gene_info.get('Protein class', 'N/A')}")
