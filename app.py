@@ -197,7 +197,7 @@ if selected_label:
                 st.write(f"• **Dysregulation Status:** {gene_info.get('Dysregulation_Status', 'N/A')}")
                 st.write(f"• **Normal Breast Level:** {normal_breast_val:.2f} nTPM")
                 st.write(f"• **Cancer Max Level:** {max_cell_val:.2f} nTPM ({top_cell_line})")
-                st.write(f"• **Disease Involvement:** {{gene_info.get('Disease involvement', 'N/A')}") 
+                st.write(f"• **Disease Involvement:** {gene_info.get('Disease involvement', 'N/A')}") 
 
             
             st.write(f"• **Protein Class:** {gene_info.get('Protein class', 'N/A')}")
