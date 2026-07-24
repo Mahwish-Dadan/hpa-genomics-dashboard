@@ -26,7 +26,6 @@ st.markdown('''
 # ---------------------------------------------------------
 @st.cache_data
 def load_data():
-    cell_df = pd.read_parquet("clean_cellline_expression.parquet")
     cell_df = pd.read_parquet("clean_cellline_expression_.parquet")
 
     normal_df = pd.read_parquet("clean_normal_expression.parquet")
@@ -40,10 +39,6 @@ def load_data():
         
     return normal_df, cell_df
 
-
-# ---------------------------------------------------------
-# 2. APPLICATION EXECUTION WRAPPER
-# ---------------------------------------------------------
 normal_df, cell_df = load_data()
 try:
     
