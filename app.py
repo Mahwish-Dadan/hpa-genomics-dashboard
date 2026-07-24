@@ -28,6 +28,14 @@ st.markdown('''
 def load_data():
     normal_df = pd.read_parquet("clean_normal_expression.parquet")
     cell_df = pd.read_parquet("clean_cellline_expression_.parquet")
+
+    # Ensure log2_nTPM column is always present in both datasets
+    if "log2_nTPM" not in normal_df.columns and "nTPM" in normal_df.columns:
+        normal_df["log2_nTPM"] = np.log2(normal_df["nTPM"] + 1)
+        
+    if "log2_nTPM" not in cell_df.columns and "nTPM" in cell_df.columns:
+        cell_df["log2_nTPM"] = np.log2(cell_df["nTPM"] + 1)
+    
     return normal_df, cell_df
 
 normal_df, cell_df = load_data()
@@ -113,12 +121,6 @@ if selected_label:
     filtered_normal = normal_df[(normal_df["Gene_Unique"] == selected_gene) & (normal_df["nTPM"] >= expression_cutoff)].copy()
     filtered_cell = cell_df[(cell_df["Gene_Unique"] == selected_gene) & (cell_df["nTPM"] >= expression_cutoff)].copy()
 
-    # Dynamic log calculation safety check
-    if use_log:
-        if "log2_nTPM" not in filtered_normal.columns and "nTPM" in filtered_normal.columns:
-            filtered_normal["log2_nTPM"] = np.log2(filtered_normal["nTPM"] + 1)
-        if "log2_nTPM" not in filtered_cell.columns and "nTPM" in filtered_cell.columns:
-            filtered_cell["log2_nTPM"] = np.log2(filtered_cell["nTPM"] + 1)
     gene_info = cell_df[cell_df["Gene_Unique"] == selected_gene].iloc[0]
 
     # Clean display values
@@ -137,7 +139,7 @@ if selected_label:
     st.markdown(f'<div class="main-header">Target Analytics: {gene_info["Gene"]}</div>', unsafe_allow_html=True)
 
     st.markdown(
-        f'<div class="sub-header">Protein Product: <b>{gene_info.get("Gene description", gene_info["Protein class"])}</b> | '
+        f'<div class="sub-header">Protein Product: <b>{gene_info.get("Gene description", "N/A")}</b> | '
         f'Ensembl: <b>{gene_info.get("Ensembl", "N/A")}</b> | '
         f'Chromosome: <b>Chr {gene_info.get("Chromosome", "N/A")}</b></div>',
         unsafe_allow_html=True
@@ -187,14 +189,14 @@ if selected_label:
             with col_a:
                 st.write(f"• **Gene Symbol:** {gene_info['Gene']}")
                 st.write(f"• **Ensembl ID:** {gene_info.get('Ensembl', 'N/A')}")
-                st.write(f"• **Protein ID:** {gene_info.get('Uniprot', 'N/A')}") 
                 st.write(f"• **Chromosomal Locus:** Chr {gene_info.get('Chromosome', 'N/A')}")
-            with col_b:
-                st.write(f"• **Protein Name:** {gene_info.get('Gene description', 'N/A')}")
                 st.write(f"• **Subcellular Location:** {gene_info.get('Subcellular main location', 'N/A')}")
+            with col_b:
+                st.write(f"• **Protein ID:** {gene_info.get('Uniprot', 'N/A')}") 
+                st.write(f"• **Protein Name:** {gene_info.get('Gene description', 'N/A')}")
                 st.write(f"• **HPA Specificity Class:** {gene_info.get('RNA tissue specificity', 'N/A')}")
-            with col_c:
                 st.write(f"• **Dysregulation Status:** {gene_info.get('Dysregulation_Status', 'N/A')}")
+            with col_c:
                 st.write(f"• **Normal Breast Level:** {normal_breast_val:.2f} nTPM")
                 st.write(f"• **Cancer Max Level:** {max_cell_val:.2f} nTPM ({top_cell_line})")
                 st.write(f"• **Disease Involvement:** {gene_info.get('Disease involvement', 'N/A')}") 
