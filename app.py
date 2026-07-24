@@ -343,10 +343,11 @@ except Exception as e:
     st.error("⚠️ An unexpected error occurred while running the analytics dashboard.")
     with st.expander("Show error details (for developers)"):
         st.exception(e)
-
-# Place at the absolute end of your script
-gc.collect()
         
     if st.button("Reset & Reload App", type="primary"):
         st.cache_data.clear()
         st.rerun()
+
+
+# Place at the absolute end of your script
+gc.collect()
