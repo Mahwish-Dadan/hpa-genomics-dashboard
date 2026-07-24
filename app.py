@@ -146,15 +146,23 @@ try:
         st.divider()
     
         # MULTI-TAB DASHBOARD
-        tab1, tab2, tab3, tab4 = st.tabs([
-            "Primary Target Profiler",
-            "Organ Similarity Matcher",
-            "Cell Line Model Selector",
-            "Multi-Gene Co-Expression"
-        ])
+        #tab1, tab2, tab3, tab4 = st.tabs([
+        #   "Primary Target Profiler",
+        #    "Organ Similarity Matcher",
+        #    "Cell Line Model Selector",
+        #    "Multi-Gene Co-Expression"
+        #])
+
+        selected_tab = st.radio(
+            "Navigation", 
+            ["Primary Target Profiler", "Organ Similarity Matcher", "Cell Line Model Selector", "Multi-Gene Co-Expression"], 
+            horizontal=True,
+            label_visibility="collapsed"
+        )
     
         # TAB 1: PRIMARY TARGET PROFILER
-        with tab1:
+        # with tab1:
+        if selected_tab == "Primary Target Profiler":
             with st.expander("View Metadata ℹ️", expanded=True):
                 col_a, col_b, col_c = st.columns(3)
                 with col_a:
@@ -198,7 +206,8 @@ try:
                 st.plotly_chart(fig_cell, use_container_width=True)
     
         # TAB 2: ORGAN SIMILARITY MATCHER
-        with tab2:
+        #with tab2:
+        elif selected_tab == "Organ Similarity Matcher":
             st.subheader("Organ Similarity Matcher")
             st.caption("Identify whether cancer cell line expression deviates from breast tissue and matches another healthy organ's profile.")
     
@@ -226,7 +235,8 @@ try:
                 st.plotly_chart(fig_match, use_container_width=True)
     
         # TAB 3: CELL LINE MODEL SELECTOR
-        with tab3:
+        # with tab3:
+        elif selected_tab == "Cell Line Model Selector":
             st.subheader("Custom In Vitro Model Selector")
     
             total_available_lines = len(cell_df["Cell Line"].unique())
@@ -250,7 +260,8 @@ try:
             st.plotly_chart(fig_rank, use_container_width=True)
     
         # TAB 4: MULTI-GENE CO-EXPRESSION
-        with tab4:
+        # with tab4:
+        elif selected_tab == "Multi-Gene Co-Expression":
             st.subheader("Multi-Gene Expression Heatmap")
     
             col_g, col_cl = st.columns(2)
