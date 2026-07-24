@@ -2,7 +2,7 @@
 
 ### **Live Web Application**
 > **Click here to explore the live dashboard:**  
-> **(https://hpa-genomics-dashboard.streamlit.app/)**
+> **https://hpa-genomics-dashboard.streamlit.app/**
 
 ---
 
