@@ -121,6 +121,14 @@ if selected_label:
     filtered_normal = normal_df[(normal_df["Gene_Unique"] == selected_gene) & (normal_df["nTPM"] >= expression_cutoff)].copy()
     filtered_cell = cell_df[(cell_df["Gene_Unique"] == selected_gene) & (cell_df["nTPM"] >= expression_cutoff)].copy()
 
+    
+    # Ensure log2_nTPM column is always present in both datasets
+    if "log2_nTPM" not in normal_df.columns and "nTPM" in normal_df.columns:
+        normal_df["log2_nTPM"] = np.log2(normal_df["nTPM"] + 1)
+        
+    if "log2_nTPM" not in cell_df.columns and "nTPM" in cell_df.columns:
+        cell_df["log2_nTPM"] = np.log2(cell_df["nTPM"] + 1)
+        
     gene_info = cell_df[cell_df["Gene_Unique"] == selected_gene].iloc[0]
 
     # Clean display values
@@ -140,8 +148,8 @@ if selected_label:
 
     st.markdown(
         f'<div class="sub-header">Protein Product: <b>{gene_info.get("Gene description", "N/A")}</b> | '
-        f'Ensembl: <b>{gene_info.get("Ensembl", "N/A")}</b> | ' 
         f'Protein ID: <b>{gene_info.get("Uniprot", "N/A")}</b> | '
+        f'Ensembl: <b>{gene_info.get("Ensembl", "N/A")}</b> | ' 
         f'Chromosome: <b>Chr {gene_info.get("Chromosome", "N/A")}</b></div>',
         unsafe_allow_html=True
     )
