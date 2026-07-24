@@ -232,8 +232,8 @@ try:
                 
                 # Display in Streamlit
                 st.metric(
-                    label=f"Closest Matching Tissue: {best_tissue}",
-                    value=f"{best_tissue_val:.2f} nTPM",
+                    label=f"Closest Matching Tissue: {closest_organ}",
+                    value=f"{organ_match.iloc[0]['nTPM']:.2f} nTPM",
                     delta=f"Δ {delta_val:.2f} difference",
                     delta_color="inverse"
                 )
