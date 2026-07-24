@@ -231,14 +231,13 @@ try:
                     explanation = "This is simply the closest tissue available in the panel, but the expression difference is substantial."
                 
                 # Display in Streamlit
-                st.metric(
-                    label=f"Closest Matching Tissue: {closest_organ}",
-                    value=f"{organ_match.iloc[0]['nTPM']:.2f} nTPM",
-                    delta=f"Δ {delta_val:.2f} difference",
-                    delta_color="inverse"
+                st.info(
+                    f"**Lineage Match Result:** Cell line **{selected_line}** (nTPM = {cell_val:.2f}) most closely matches **Healthy {closest_organ} Tissue** "
+                    f"(nTPM = {closest_val:.2f}, Δ = {closest_diff:.2f}).\n\n"
+                    f"**Similarity Level:** {confidence_label}\n\n*{explanation}*"
                 )
                 
-                st.info(f"**Similarity Level:** {confidence_label}\n\n*{explanation}*")
+                #st.info(f"**Similarity Level:** {confidence_label}\n\n*{explanation}*")
     
                 #st.info(f"**Lineage Match Result:** Cell line **{selected_line}** (nTPM = {cell_val:.2f}) most closely matches **Healthy {closest_organ} Tissue** (nTPM = {organ_match.iloc[0]['nTPM']:.2f}, Δ = {closest_diff:.2f}).")
     
