@@ -29,7 +29,7 @@ def load_data():
     normal_df = pd.read_parquet("clean_normal_expression.parquet")
     cell_df = pd.read_parquet("clean_cellline_expression_.parquet")
 
-    # Ensure log2_nTPM column is always present in both datasets
+    # Compute transformations globally
     if "log2_nTPM" not in normal_df.columns and "nTPM" in normal_df.columns:
         normal_df["log2_nTPM"] = np.log2(normal_df["nTPM"] + 1)
         
@@ -120,14 +120,6 @@ if selected_label:
     # Filter Datasets
     filtered_normal = normal_df[(normal_df["Gene_Unique"] == selected_gene) & (normal_df["nTPM"] >= expression_cutoff)].copy()
     filtered_cell = cell_df[(cell_df["Gene_Unique"] == selected_gene) & (cell_df["nTPM"] >= expression_cutoff)].copy()
-
-    
-    # Ensure log2_nTPM column is always present in both datasets
-    if "log2_nTPM" not in normal_df.columns and "nTPM" in normal_df.columns:
-        normal_df["log2_nTPM"] = np.log2(normal_df["nTPM"] + 1)
-        
-    if "log2_nTPM" not in cell_df.columns and "nTPM" in cell_df.columns:
-        cell_df["log2_nTPM"] = np.log2(cell_df["nTPM"] + 1)
         
     gene_info = cell_df[cell_df["Gene_Unique"] == selected_gene].iloc[0]
 
@@ -335,7 +327,7 @@ if selected_label:
             show_corr = st.checkbox("Enable Gene-Gene Pearson Correlation Analysis", value=False)
 
             if show_corr:
-                if len(multi_selected_genes) >= 3:
+                if len(multi_selected_genes) >= 2:
                     # st.markdown("#### Gene-Gene Expression Correlation Matrix (Pearson r)")
 
                     corr_matrix = pivot_df.T.corr()
@@ -361,9 +353,10 @@ if selected_label:
                             * **$r \le -0.70$ (Inverse Co-Regulation):** High expression of one gene coincides with suppression of the other (e.g., mutually exclusive oncogenic drivers).
                             """)
 
+                else:
+                    st.warning("Please select at least 2 genes and 1 cell line to display the matrix.")
             else:
-                st.warning("Please select at least 2 genes and 1 cell line to display the matrix.")
-
+                st.warning()
 
     # export option
 
