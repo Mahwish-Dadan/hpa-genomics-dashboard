@@ -158,6 +158,7 @@ try:
         # TAB 1: PRIMARY TARGET PROFILER
         # with tab1:
         if selected_tab == "Primary Target Profiler":
+            gc.collect()
             with st.expander("View Metadata ℹ️", expanded=True):
                 col_a, col_b, col_c = st.columns(3)
                 with col_a:
@@ -203,6 +204,7 @@ try:
         # TAB 2: ORGAN SIMILARITY MATCHER
         #with tab2:
         elif selected_tab == "Organ Similarity Matcher":
+            gc.collect()
             st.subheader("Organ Similarity Matcher")
             st.caption("Identify whether cancer cell line expression deviates from breast tissue and matches another healthy organ's profile.")
     
@@ -216,8 +218,31 @@ try:
     
                 closest_organ = organ_match.iloc[0]["Tissue"]
                 closest_diff = organ_match.iloc[0]["Abs_Difference"]
+
+                delta_val = closest_diff
+                
+                # Categorize confidence level based on biological thresholds
+                if delta_val <= 0.1:
+                    confidence_label = "Strong Match / High Similarity"
+                    explanation = "The expression level is nearly identical to this normal tissue baseline."
+                elif delta_val <= 0.5:
+                    confidence_label = "Moderate Match / Plausible Variant"
+                    explanation = "The expression is relatively close, but represents a minor variance."
+                else:
+                    confidence_label = "Weak / Relative Match Only"
+                    explanation = "This is simply the closest tissue available in the panel, but the expression difference is substantial."
+                
+                # Display in Streamlit
+                st.metric(
+                    label=f"Closest Matching Tissue: {best_tissue}",
+                    value=f"{best_tissue_val:.2f} nTPM",
+                    delta=f"Δ {delta_val:.2f} difference",
+                    delta_color="inverse"
+                )
+                
+                st.info(f"**Similarity Level:** {confidence_label}\n\n*{explanation}*")
     
-                st.info(f"**Lineage Match Result:** Cell line **{selected_line}** (nTPM = {cell_val:.2f}) most closely matches **Healthy {closest_organ} Tissue** (nTPM = {organ_match.iloc[0]['nTPM']:.2f}, Δ = {closest_diff:.2f}).")
+                #st.info(f"**Lineage Match Result:** Cell line **{selected_line}** (nTPM = {cell_val:.2f}) most closely matches **Healthy {closest_organ} Tissue** (nTPM = {organ_match.iloc[0]['nTPM']:.2f}, Δ = {closest_diff:.2f}).")
     
                 fig_match = px.bar(
                     organ_match, x="Tissue", y="nTPM", color="Abs_Difference",
@@ -232,6 +257,7 @@ try:
         # TAB 3: CELL LINE MODEL SELECTOR
         # with tab3:
         elif selected_tab == "Cell Line Model Selector":
+            gc.collect()
             st.subheader("Custom In Vitro Model Selector")
     
             total_available_lines = len(cell_df["Cell Line"].unique())
@@ -257,6 +283,7 @@ try:
         # TAB 4: MULTI-GENE CO-EXPRESSION
         # with tab4:
         elif selected_tab == "Multi-Gene Co-Expression":
+            gc.collect()
             st.subheader("Multi-Gene Expression Heatmap")
     
             col_g, col_cl = st.columns(2)
