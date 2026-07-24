@@ -18,7 +18,8 @@ Built with performance, memory optimization, and clinical relevance in mind, thi
 ## Key Features
 
 * **Targeted Search & Genomic Filters:** Search genes by **Gene Symbol**, **Ensembl ID**, or **Protein Name/Description**. Filter dynamically by **Chromosome** and **Disease Involvement**.
-* **Scalable Log Transformation:** Dynamic toggling between raw normalized Transcripts Per Million (**nTPM**) and logarithmic transformation ($\log_2(\text{nTPM} + 1)$) for high dynamic range expression datasets.
+* **Scalable Log Transformation:** Dynamic toggling between raw normalized Transcripts Per Million (**nTPM**) and logarithmic transformation $\log_2(\text{nTPM} + 1)$
+ + 1)$) for high dynamic range expression datasets.
 * **Primary Target Profiler:** Compare healthy tissue baselines against cancer cell line distributions with interactive boxplots and hover tooltips.
 * **Cell Line Model Selector:** Dynamic ranking of top or bottom expressors (useful for identifying positive/negative controls for *in vitro* validation assays).
 * **Organ Similarity Matcher:** Quantify expression delta ($\Delta\text{nTPM}$) to identify which healthy tissue profile a selected cancer line most closely aligns with.
