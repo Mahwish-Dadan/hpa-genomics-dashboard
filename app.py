@@ -348,9 +348,9 @@ if selected_label:
                             st.markdown("### Correlation Interpretation Guide 💡 ")
                             st.info("""
                             **Pearson Coefficient ($r$) Ranges:**
-                            * **$r \ge +0.70$ (Strong Co-Regulation):** Genes tend to be activated or suppressed together across cell lines, suggesting shared signaling pathways or transcriptional controls.
+                            * **$r \\ge +0.70$ (Strong Co-Regulation):** Genes tend to be activated or suppressed together across cell lines, suggesting shared signaling pathways or transcriptional controls.
                             * **$-0.30 < r < +0.30$ (Independent):** Expression profiles operate independently.
-                            * **$r \le -0.70$ (Inverse Co-Regulation):** High expression of one gene coincides with suppression of the other (e.g., mutually exclusive oncogenic drivers).
+                            * **$r \\le -0.70$ (Inverse Co-Regulation):** High expression of one gene coincides with suppression of the other (e.g., mutually exclusive oncogenic drivers).
                             """)
 
                 else:
