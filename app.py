@@ -22,7 +22,7 @@ st.markdown('''
 </style>
 ''', unsafe_allow_html=True)
 
-@st.cache_data
+@st.cache_data(show_spinner="Loading HPA Datasets...")
 def load_data():
     cell_df = pd.read_parquet("clean_cellline_expression_.parquet")
 
@@ -37,11 +37,12 @@ def load_data():
         
     return normal_df, cell_df
 
+normal_df, cell_df = load_data()
+
 # Callback function to wipe dead variables from RAM when a toggle changes
 def free_ram_callback():
     gc.collect()
 
-normal_df, cell_df = load_data()
 try:
     
     # Sidebar
@@ -180,11 +181,14 @@ try:
     
             st.markdown("---")
             st.subheader("Healthy Breast Baseline vs. Cancer Cell Line Distributions")
-    
+
+            breast_data = filtered_normal[filtered_normal["Tissue"].str.contains("breast", case=False, na=False)]
+            breast_val = breast_data[val_col].values[0]
+        
             c1, c2 = st.columns([1, 2])
             with c1:
                 fig_norm = px.bar(
-                    filtered_normal, x="Tissue", y=val_col, color="Tissue",
+                    filtered_normal, x="breast_data", y=val_col, color="Tissue",
                     title=f"Healthy Normal Tissue Profiles ({unit_label})",
                     labels={val_col: unit_label}
                 )
