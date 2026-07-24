@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
+import gc
 
 # Config
 st.set_page_config(
@@ -21,9 +22,6 @@ st.markdown('''
 </style>
 ''', unsafe_allow_html=True)
 
-# ---------------------------------------------------------
-# 1. CACHED DATA LOADER (MUST BE AT TOP-LEVEL MODULE SCOPE)
-# ---------------------------------------------------------
 @st.cache_data
 def load_data():
     cell_df = pd.read_parquet("clean_cellline_expression_.parquet")
@@ -39,6 +37,10 @@ def load_data():
         
     return normal_df, cell_df
 
+# Callback function to wipe dead variables from RAM when a toggle changes
+def free_ram_callback():
+    gc.collect()
+
 normal_df, cell_df = load_data()
 try:
     
@@ -48,13 +50,13 @@ try:
     # Chromosome Filter 
     st.sidebar.markdown("### Genomic Location")
     all_chroms = ["All"] + sorted([str(c) for c in cell_df["Chromosome"].dropna().unique()])
-    selected_chrom = st.sidebar.selectbox("Filter by Chromosome", all_chroms, index=0)
+    selected_chrom = st.sidebar.selectbox("Filter by Chromosome", all_chroms, index=0, on_change=free_ram_callback)
     
     # Disease Involvement Filter
     st.sidebar.markdown("### Clinical Context")
     raw_diseases = cell_df["Disease involvement"].dropna().unique()
     disease_options = ["All Categories"] + sorted([str(d) for d in raw_diseases if str(d).strip() != ""])
-    selected_disease = st.sidebar.selectbox("Filter by Disease Involvement", disease_options, index=0)
+    selected_disease = st.sidebar.selectbox("Filter by Disease Involvement", disease_options, index=0, on_change=free_ram_callback)
     
     # Apply Combined Filters
     filtered_lookup_df = cell_df.copy()
@@ -85,7 +87,7 @@ try:
     
     gene_list = sorted(cell_df["Gene_Unique"].unique())
     
-    use_log = st.sidebar.toggle("Transform Scale: Log2(nTPM + 1)", value=True)
+    use_log = st.sidebar.toggle("Transform Scale: Log2(nTPM + 1)", value=True, on_change=free_ram_callback)
     val_col = "log2_nTPM" if use_log else "nTPM"
     unit_label = "Log₂ (nTPM + 1)" if use_log else "nTPM"
     
@@ -263,7 +265,7 @@ try:
             with col_cl:
                 all_lines = sorted(cell_df["Cell Line"].unique())
                 default_subset = all_lines[:min(10, len(all_lines))]
-                select_all = st.checkbox("Select All Cell Lines", value=False)
+                select_all = st.checkbox("Select All Cell Lines", value=False, on_change=free_ram_callback)
     
                 if select_all:
                     selected_cell_lines = st.multiselect("Select Cell Lines", all_lines, default=all_lines)
@@ -335,10 +337,15 @@ try:
             mime="text/csv"
         )
 
+        
+
 except Exception as e:
     st.error("⚠️ An unexpected error occurred while running the analytics dashboard.")
     with st.expander("Show error details (for developers)"):
         st.exception(e)
+
+# Place at the absolute end of your script
+gc.collect()
         
     if st.button("Reset & Reload App", type="primary"):
         st.cache_data.clear()
