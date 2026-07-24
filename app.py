@@ -81,7 +81,7 @@ else:
 #    filtered_gene_df = filtered_gene_df[filtered_gene_df["Chromosome"].astype(str) == selected_chrom]
 
 gene_list = sorted(cell_df["Gene_Unique"].unique())
-selected_gene = st.sidebar.selectbox("Select Target Gene / Ensembl ID", gene_list, index=0)
+# selected_gene = st.sidebar.selectbox("Select Target Gene / Ensembl ID", gene_list, index=0)
 
 use_log = st.sidebar.toggle("Transform Scale: Log2(nTPM + 1)", value=True)
 val_col = "log2_nTPM" if use_log else "nTPM"
