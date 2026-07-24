@@ -1,4 +1,3 @@
-# HPA-Gene-dashboard
 # Human Protein Atlas (HPA) Gene Expression Analytics 🧬 
 
 ### **Live Web Application**
