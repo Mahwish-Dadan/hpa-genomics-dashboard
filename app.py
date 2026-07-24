@@ -140,7 +140,8 @@ if selected_label:
 
     st.markdown(
         f'<div class="sub-header">Protein Product: <b>{gene_info.get("Gene description", "N/A")}</b> | '
-        f'Ensembl: <b>{gene_info.get("Ensembl", "N/A")}</b> | '
+        f'Ensembl: <b>{gene_info.get("Ensembl", "N/A")}</b> | ' 
+        f'Protein ID: <b>{gene_info.get("Uniprot", "N/A")}</b> | '
         f'Chromosome: <b>Chr {gene_info.get("Chromosome", "N/A")}</b></div>',
         unsafe_allow_html=True
     )
@@ -184,7 +185,7 @@ if selected_label:
     with tab1:
 
         # Metadata Overview Panel inside Tab 1
-        with st.expander("View Comprehensive Biological & Protein Metadata ℹ️ ", expanded=True):
+        with st.expander("View Metadata ℹ️ ", expanded=True):
             col_a, col_b, col_c = st.columns(3)
             with col_a:
                 st.write(f"• **Gene Symbol:** {gene_info['Gene']}")
@@ -195,11 +196,11 @@ if selected_label:
                 st.write(f"• **Protein ID:** {gene_info.get('Uniprot', 'N/A')}") 
                 st.write(f"• **Protein Name:** {gene_info.get('Gene description', 'N/A')}")
                 st.write(f"• **HPA Specificity Class:** {gene_info.get('RNA tissue specificity', 'N/A')}")
-                st.write(f"• **Dysregulation Status:** {gene_info.get('Dysregulation_Status', 'N/A')}")
+                st.write(f"• **Disease Involvement:** {gene_info.get('Disease involvement', 'N/A')}") 
             with col_c:
                 st.write(f"• **Normal Breast Level:** {normal_breast_val:.2f} nTPM")
                 st.write(f"• **Cancer Max Level:** {max_cell_val:.2f} nTPM ({top_cell_line})")
-                st.write(f"• **Disease Involvement:** {gene_info.get('Disease involvement', 'N/A')}") 
+                st.write(f"• **Dysregulation Status:** {gene_info.get('Dysregulation_Status', 'N/A')}")
 
             
             st.write(f"• **Protein Class:** {gene_info.get('Protein class', 'N/A')}")
