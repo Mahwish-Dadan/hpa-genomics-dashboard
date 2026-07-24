@@ -356,7 +356,7 @@ if selected_label:
                 else:
                     st.warning("Please select at least 2 genes and 1 cell line to display the matrix.")
             else:
-                st.warning()
+                st.warning("")
 
     # export option
 
