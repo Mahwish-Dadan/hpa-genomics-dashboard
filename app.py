@@ -232,8 +232,8 @@ try:
                 
                 # Display in Streamlit
                 st.info(
-                    f"**Lineage Match Result:** Cell line **{selected_line}** (nTPM = {cell_val:.2f}) most closely matches **Healthy {closest_organ} Tissue** "
-                    f"(nTPM = {closest_val:.2f}, Δ = {closest_diff:.2f}).\n\n"
+                    f"**Lineage Match Result:** Cell line **{selected_line}**  most closely matches **Healthy {closest_organ} Tissue** "
+                    f"({selected_line} (nTPM = {cell_val:.2f}), {closest_organ} nTPM = {organ_match.iloc[0]['nTPM']:.2f}, Δ = {closest_diff:.2f}).\n\n"
                     f"**Similarity Level:** {confidence_label}\n\n*{explanation}*"
                 )
                 
